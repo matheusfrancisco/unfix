@@ -1,6 +1,9 @@
 (ns joy.unfix.postfix-test
   (:use [clojure.test :only [deftest is]])
-  (:use [joy.unfix.postfix :only [postfix postfix2]]))
+  (:use [joy.unfix.postfix :only [postfix]])
+  (:require
+   [clojure.repl :refer [demunge]]
+   [clojure.string :refer [split]]))
 
 (deftest test-postfix
   (is (= [14] (postfix 5 1 2 + 4 * + 3 -)))
@@ -15,4 +18,12 @@
   (is (= [1 8] (postfix 5 1 2 sum! 1)))
   (is (= [2 5] (postfix 5 1 2 max>))))
 
+;fn name
+#_(as-> (str sum!) $
+  (demunge $)
+  (or (re-find #"(.+)--\d+@" $)
+      (re-find #"(.+)@" $))
+  (last $)
+  (split $ #"/")
+  (last $))
 
